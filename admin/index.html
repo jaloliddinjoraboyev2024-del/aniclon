@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Aniclon</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .admin-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 600px;
+            margin: 30px auto;
+        }
+        .admin-form input, .admin-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        .admin-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .admin-form button {
+            background: #e94560;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        .admin-form button:hover {
+            background: #ff6b8a;
+        }
+        .anime-list-admin {
+            margin-top: 30px;
+        }
+        .anime-item-admin {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .delete-btn {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .warning {
+            background: #ffc107;
+            color: #000;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🍥 Aniclon - Admin Panel</h1>
+            <nav>
+                <a href="../index.html">Bosh sahifa</a>
+                <a href="../anime-list.html">Animelar</a>
+                <a href="#" class="active">Admin panel</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="warning">
+            ⚠️ <strong>Eslatma:</strong> Bu admin panel brauzer localStorage'da ma'lumot saqlaydi. 
+            Saytni GitHub + Netlify'ga joylaganingizdan so'ng, Netlify CMS orqali to'liq admin panelga ega bo'lasiz.
+        </div>
+
+        <div class="admin-form">
+            <h2>➕ Yangi anime qo'shish</h2>
+            <input type="text" id="anime-id" placeholder="ID (masalan: naruto-shippuden)">
+            <input type="text" id="anime-title" placeholder="Anime nomi">
+            <input type="text" id="anime-genre" placeholder="Janr (masalan: Action, Fantasy)">
+            <input type="text" id="anime-year" placeholder="Yil">
+            <input type="text" id="anime-image" placeholder="Rasm URL (ixtiyoriy)">
+            <textarea id="anime-description" placeholder="Anime haqida ma'lumot..."></textarea>
+            <button onclick="addAnime()">➕ Anime qo'shish</button>
+        </div>
+
+        <div class="anime-list-admin">
+            <h2>📋 Mavjud animelar</h2>
+            <div id="admin-anime-list"></div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Aniclon. Admin panel</p>
+        </div>
+    </footer>
+
+    <script src="../assets/js/anime-data.js"></script>
+    <script>
+        function displayAdminList() {
+            const container = document.getElementById('admin-anime-list');
+            const allAnime = loadAllAnime();
+            
+            if (allAnime.length === 0) {
+                container.innerHTML = '<div class="loading">Hozircha anime yo\'q</div>';
+                return;
+            }
+            
+            container.innerHTML = allAnime.map(anime => `
+                <div class="anime-item-admin">
+                    <div>
+                        <strong>${anime.title}</strong> (${anime.year}) - ${anime.genre}
+                    </div>
+                    <button class="delete-btn" onclick="deleteAnime('${anime.id}')">O'chirish</button>
+                </div>
+            `).join('');
+        }
+        
+        function addAnime() {
+            const id = document.getElementById('anime-id').value.trim();
+            const title = document.getElementById('anime-title').value.trim();
+            const genre = document.getElementById('anime-genre').value.trim();
+            const year = document.getElementById('anime-year').value.trim();
+            const image = document.getElementById('anime-image').value.trim();
+            const description = document.getElementById('anime-description').value.trim();
+            
+            if (!id || !title) {
+                alert('ID va nom majburiy!');
+                return;
+            }
+            
+            const newAnime = {
+                id: id.toLowerCase().replace(/\s+/g, '-'),
+                title: title,
+                titleUz: title,
+                image: image || 'assets/images/placeholder.jpg',
+                genre: genre || 'Noma\'lum',
+                year: year || new Date().getFullYear().toString(),
+                description: description || 'Ma\'lumot mavjud emas.'
+            };
+            
+            let saved = JSON.parse(localStorage.getItem('aniclon_anime') || '[]');
+            saved.push(newAnime);
+            localStorage.setItem('aniclon_anime', JSON.stringify(saved));
+            
+            // Formani tozalash
+            document.getElementById('anime-id').value = '';
+            document.getElementById('anime-title').value = '';
+            document.getElementById('anime-genre').value = '';
+            document.getElementById('anime-year').value = '';
+            document.getElementById('anime-image').value = '';
+            document.getElementById('anime-description').value = '';
+            
+            displayAdminList();
+            alert('Anime qo\'shildi!');
+        }
+        
+        function deleteAnime(id) {
+            if (confirm('Animeni o\'chirmoqchimisiz?')) {
+                let saved = JSON.parse(localStorage.getItem('aniclon_anime') || '[]');
+                saved = saved.filter(a => a.id !== id);
+                localStorage.setItem('aniclon_anime', JSON.stringify(saved));
+                displayAdminList();
+                alert('Anime o\'chirildi!');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', displayAdminList);
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcha animelar - Aniclon</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🍥 Aniclon</h1>
+            <nav>
+                <a href="index.html">Bosh sahifa</a>
+                <a href="anime-list.html" class="active">Animelar</a>
+                <a href="admin/" target="_blank">Admin panel</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>📺 Barcha animelar</h2>
+            <input type="text" id="search-input" placeholder="🔍 Anime qidirish..." class="search-input">
+        </section>
+
+        <section id="anime-list" class="anime-grid">
+            <div class="loading">Yuklanmoqda...</div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Aniclon. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/anime-data.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

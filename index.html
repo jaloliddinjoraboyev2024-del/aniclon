@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniclon - Anime sayti</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🍥 Aniclon</h1>
+            <nav>
+                <a href="index.html" class="active">Bosh sahifa</a>
+                <a href="anime-list.html">Animelar</a>
+                <a href="admin/" target="_blank">Admin panel</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="hero">
+            <h2>✨ Yangi qo'shilgan animelar</h2>
+            <p>Eng so'nggi animelar birinchi bo'lib shu yerda!</p>
+        </section>
+
+        <section id="anime-list" class="anime-grid">
+            <!-- Animelar JavaScript orqali yuklanadi -->
+            <div class="loading">Yuklanmoqda...</div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Aniclon. Barcha huquqlar himoyalangan.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/anime-data.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
